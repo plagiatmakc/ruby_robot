@@ -5,7 +5,7 @@ class Robot
   def initialize(table_x = 5, table_y = 6)
     @table_x = table_x
     @table_y = table_y
-    @directions = %W['WEST', 'NORTH', 'EAST', 'SOUTH']
+    @directions = %w[WEST NORTH EAST SOUTH]
     p('Place your robot')
     request = gets.chomp
     while request != 'EXIT'
@@ -21,15 +21,13 @@ class Robot
       regx_params = /(?<command>^\w+) (?<x_dim>\d+),(?<y_dim>\d+),(?<direction>\w+)/.match(str)
       place(regx_params[:x_dim].to_i, regx_params[:y_dim].to_i, regx_params[:direction])
     when 'MOVE'
-      move
+      move if @current_pos
     when 'LEFT'
-      left
-      p('Robot was turn left')
+      left if @current_pos
     when 'RIGHT'
-      right
-      p('Robot was turn right')
+      right if current_pos
     when 'REPORT'
-      report
+      report if @current_pos
     end
   end
 
