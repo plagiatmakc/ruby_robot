@@ -8,7 +8,7 @@ class Robot
     @directions = %w[WEST NORTH EAST SOUTH]
     p('Place your robot')
     request = gets.chomp
-    while request != 'EXIT'
+    while request != ''
       play(request)
       request = gets.chomp
     end
@@ -21,20 +21,20 @@ class Robot
       regx_params = /(?<command>^\w+) (?<x_dim>\d+),(?<y_dim>\d+),(?<direction>\w+)/.match(str)
       place(regx_params[:x_dim].to_i, regx_params[:y_dim].to_i, regx_params[:direction])
     when 'MOVE'
-      move if @current_pos
+      @current_pos ? move : puts('Robot wasn\'t placed')
     when 'LEFT'
-      left if @current_pos
+      @current_pos ? left : puts('Robot wasn\'t placed')
     when 'RIGHT'
-      right if current_pos
+      @current_pos ? right : puts('Robot wasn\'t placed')
     when 'REPORT'
-      report if @current_pos
+      @current_pos ? report : puts('Robot wasn\'t placed')
     end
   end
 
   def place(x_dim, y_dim, direction)
     return p('dont place outside a table') if x_dim < 0 || x_dim > @table_x || y_dim < 0 || y_dim > @table_y
 
-    @current_pos = { :x_dim => x_dim, :y_dim => y_dim, :direction => direction }
+    @current_pos = { x_dim: x_dim, y_dim: y_dim, direction: direction }
     p('Robot was placed')
   end
 
@@ -60,7 +60,7 @@ class Robot
   end
 
   def report
-    return  puts('Robot not placed') if @current_pos.nil?
+    return puts('Robot not placed') if @current_pos.nil?
 
     puts("Output: #{@current_pos[:x_dim]},#{@current_pos[:y_dim]},#{@current_pos[:direction]}")
   end
